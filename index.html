@@ -1,0 +1,733 @@
+<!-- Save as index.html next to folder /img containing:
+     img/apathy.png
+     img/your_program.png
+     img/your_site.png
+     img/database.png
+     img/AlwaysApathiec.png
+-->
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ApathyStore — demo</title>
+<style>
+/* ======= Dark / Light theme variables & base styling ======= */
+:root{
+  --bg:#08060a;
+  --bg-2:#0b0b0f;
+  --card:#0f0d13;
+  --muted:#9aa0a6;
+  --accent1:#8b5cf6;
+  --accent2:#7c3aed;
+  --glass: rgba(255,255,255,0.03);
+  --radius:16px;
+  --trans: 220ms;
+  --text:#e6eef8;
+  --shadow: 0 12px 40px rgba(3,2,6,0.6);
+}
+:root.light {
+  --bg: #f6f7fb;
+  --bg-2: #fff;
+  --card: #ffffff;
+  --muted: #5a6470;
+  --accent1: #6b5cff;
+  --accent2: #4f3bff;
+  --glass: rgba(0,0,0,0.04);
+  --text: #0b1220;
+  --shadow: 0 10px 30px rgba(12,18,30,0.06);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(180deg,var(--bg) 0%, var(--bg-2) 40%, var(--bg) 100%);
+  color:var(--text);
+  font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  transition:background var(--trans) ease,color var(--trans) ease;
+  scroll-behavior: smooth;
+}
+/* layout */
+.container{max-width:1180px;margin:0 auto;padding:36px;}
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 36px;}
+.logo{font-weight:800;font-size:20px}
+.logo span{color:var(--accent1)}
+.nav-buttons{display:flex;gap:12px;align-items:center}
+.nav-btn {
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.06);
+  padding:8px 14px;
+  border-radius:12px;
+  color:var(--muted);
+  cursor:pointer;
+  transition: all var(--trans) cubic-bezier(.2,.9,.2,1);
+  font-weight:600;
+}
+.light .nav-btn { border-color: rgba(11,18,32,0.06); }
+.nav-btn:hover{ transform:translateY(-3px); border-color: rgba(157,77,255,0.12); }
+.nav-btn.active{
+  border-color: rgba(157,77,255,0.9);
+  box-shadow:0 6px 18px rgba(124,58,237,0.08);
+  background:linear-gradient(90deg,var(--accent1),var(--accent2));
+  color:white;
+  transform:none;
+}
+.header-cta{
+  padding:8px 14px;border-radius:12px;background:linear-gradient(90deg,var(--accent1),var(--accent2));border:none;color:white;cursor:pointer;box-shadow:var(--shadow);transition:all var(--trans);
+}
+.header-cta:hover{transform:translateY(-3px)}
+
+/* hero */
+.hero{display:flex;gap:30px;align-items:center;margin-top:30px}
+.hero-left{flex:1}
+.title{font-size:56px;line-height:1.02;font-weight:800}
+.subtitle{color:var(--muted);margin-top:12px;max-width:640px}
+
+/* featured card */
+.hero-card{width:420px;background:var(--card);border-radius:24px;padding:18px;border:1px solid rgba(255,255,255,0.02);box-shadow:var(--shadow)}
+.hero-card .thumb{height:180px;border-radius:12px;background:linear-gradient(180deg,#0b0b0f,#0f0f12);display:flex;align-items:center;justify-content:center;color:var(--muted);margin-bottom:12px}
+
+/* products */
+.products-section{margin-top:48px}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;margin-top:18px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:18px;border-radius:16px;border:1px solid rgba(255,255,255,0.03);transition:transform 260ms ease,box-shadow 260ms ease;cursor:default;position:relative;overflow:hidden;will-change:transform,opacity}
+.card:hover{transform:translateY(-6px);box-shadow:0 18px 50px rgba(2,2,6,0.6)}
+.card .img{height:140px;border-radius:10px;background:#121214;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:var(--muted);margin-bottom:12px}
+.card h3{margin:0;font-size:18px}
+.card .meta{color:var(--muted);font-size:13px;margin-top:8px}
+.card .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.price{font-weight:700;margin-top:10px}
+
+/* card appear animation (staggered) */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px) scale(.995); filter: blur(6px); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+.card.appear{ animation: cardIn 420ms cubic-bezier(.2,.9,.2,1) forwards; }
+
+/* new button styles matching design */
+.btn{padding:8px 12px;border-radius:12px;background:linear-gradient(90deg,var(--accent1),var(--accent2));border:none;color:#fff;cursor:pointer;transition:all var(--trans);font-weight:700}
+.btn:hover{transform:translateY(-2px)}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:700}
+.btn-ghost:hover{background:rgba(255,255,255,0.02);color:#fff;transform:translateY(-2px)}
+
+/* small round open button */
+.open-btn{background:transparent;border-radius:12px;padding:8px 12px;border:1px solid rgba(255,255,255,0.06);color:var(--muted);cursor:pointer;font-weight:700;transition:all var(--trans)}
+.open-btn:hover{background:rgba(255,255,255,0.02);color:#fff;transform:translateY(-2px)}
+
+/* cart toast */
+.cart-toast{position:fixed;top:20px;right:20px;background:var(--card);padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 34px rgba(2,2,6,0.6);display:flex;gap:12px;align-items:center;z-index:9999}
+.hidden{display:none !important}
+
+/* overlays */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:60}
+.overlay.show{display:flex}
+.modal{background:var(--card);padding:18px;border-radius:14px;width:90%;max-width:720px;color:var(--text);border:1px solid rgba(255,255,255,0.03)}
+.input{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;margin-top:8px}
+.small{font-size:13px;color:var(--muted);margin-top:6px}
+.footer{margin-top:46px;padding:40px 0;text-align:center;color:var(--muted)}
+
+/* sections animated fade */
+.section{opacity:0;transform:translateY(6px);transition:opacity 260ms ease, transform 260ms ease;display:none}
+.section.active{display:block;opacity:1;transform:none}
+
+/* mini profile dropdown */
+.profile-menu { position: absolute; top:56px; right:36px; background:var(--card); border-radius:12px; padding:10px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,0.04); min-width:180px; z-index:120; }
+.profile-menu button { display:block; width:100%; text-align:left; padding:8px 10px; border-radius:8px; background:transparent; border:none; color:var(--muted); cursor:pointer; }
+.profile-menu button:hover { background:rgba(255,255,255,0.02); color:var(--text); }
+
+/* theme toggle */
+.theme-toggle { padding:8px 10px; border-radius:10px; background:transparent; border:1px solid rgba(255,255,255,0.06); cursor:pointer; color:var(--muted); }
+
+/* responsive */
+@media (max-width:900px){
+  .hero{flex-direction:column;align-items:flex-start}
+  .hero-card{width:100%}
+  nav{padding:12px}
+  .title{font-size:36px}
+}
+</style>
+</head>
+<body>
+  <nav>
+    <div class="logo">Apathy<span>Store</span></div>
+    <div class="nav-buttons">
+      <button id="navHome" class="nav-btn" onclick="goSection('home')">Home</button>
+      <button id="navShop" class="nav-btn" onclick="goSection('shop')">Shop</button>
+      <button id="navAbout" class="nav-btn" onclick="goSection('about')">About</button>
+      <button id="themeToggle" title="Toggle theme" class="nav-btn" onclick="toggleTheme()">Theme</button>
+      <button id="navSign" class="nav-btn" onclick="openAuth()">Sign in</button>
+      <button id="navCart" class="header-cta" onclick="toggleCart()">Cart <span id="cartCount" style="font-weight:600;margin-left:8px">0</span></button>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <div class="container section active" id="homeSection">
+    <div class="hero">
+      <div class="hero-left">
+        <div class="title">By @AlwaysApathiec.</div>
+        <div class="subtitle">ApathyStore — Приветствуем. Нажми «Shop» и начни покупки.</div>
+        <div style="margin-top:18px">
+          <button class="header-cta" onclick="goSection('shop')">Start shopping</button>
+          <button class="nav-btn" style="margin-left:10px" onclick="openAuth()">Sign in</button>
+        </div>
+      </div>
+      <div>
+        <div class="hero-card">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Featured</div>
+          <div class="thumb" id="featuredThumb">Apathy Exclusive Drop</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+            <div>
+              <div style="font-weight:700">Apathy T-shirt</div>
+              <div class="small" style="margin-top:6px">Limited digital item • $13</div>
+            </div>
+            <div>
+              <button class="btn" onclick="addToCart('p1')">Add $13</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHOP -->
+  <div class="container section hidden" id="shopSection">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <h2>Products</h2>
+        <div class="small" id="itemsCount">0 items</div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="nav-btn" onclick="openAdmin()">Admin</button>
+        <button class="nav-btn" onclick="goSection('about')">About</button>
+      </div>
+    </div>
+
+    <div class="products-section">
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="container section hidden" id="aboutSection">
+    <h2>About</h2>
+    <p class="small">ApathyStore — Это мой новый проект - сайт. Надеюсь вам здесь все понравится, тут я буду продовать свой мерч и всякую всячину.</p>
+  </div>
+
+  <div class="footer">© ApathyStore • Рад вас видеть тут!</div>
+
+  <!-- CART TOAST (top-right) -->
+  <div id="cartToast" class="cart-toast hidden" onclick="hideCartToast()"></div>
+
+  <!-- OVERLAYS -->
+  <div id="overlay" class="overlay" onclick="closeModal()">
+    <div id="modal" class="modal" onclick="event.stopPropagation()"></div>
+  </div>
+
+<script>
+/* ===========================
+   Config / initial products
+   Paths to images (must exist under /img)
+   =========================== */
+const DEFAULT_YOOMONEY_ACCOUNT = '4100XXXXXXX'; // <-- replace in admin with your number
+const CURRENCY_RATE_RUB_PER_USD = 90; // example conversion
+let WEBHOOK_URL = '';
+
+// products - paths unchanged
+let PRODUCTS = [
+  {id:'p1', title:'Apathy T-shirt', price:13, desc:'Digital collectible — Apathy T-shirt. Limited.', img:'img/apathy.png'},
+  {id:'p2', title:'Your Programm', price:5, desc:'Handy little script or program template.', img:'img/your_program.png'},
+  {id:'p3', title:'Your site', price:7, desc:'A minimal single-page site template.', img:'img/your_site.png'},
+  {id:'p4', title:'Database', price:20, desc:'Small demo database file + schema.', img:'img/database.png'},
+  {id:'p5', title:'Apathy T-shirt', price:20, desc:'T-Shirt AlwaysApathiec.', img:'img/AlwaysApathiec.png'}
+];
+
+// override with saved products
+const savedProducts = localStorage.getItem('apathy_products');
+if(savedProducts){
+  try{
+    const parsed = JSON.parse(savedProducts);
+    if(Array.isArray(parsed) && parsed.length) PRODUCTS = parsed;
+  }catch(e){}
+}
+
+// state
+let cart = JSON.parse(localStorage.getItem('apathy_cart')||'{}');
+let currentUser = JSON.parse(localStorage.getItem('apathy_user')||'null');
+let toastTimer = null;
+let profileMenuEl = null;
+let theme = localStorage.getItem('apathy_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
+/* ===========================
+   THEME: apply and toggle
+   =========================== */
+function applyTheme(t){
+  theme = t;
+  if(t === 'light') document.documentElement.classList.add('light');
+  else document.documentElement.classList.remove('light');
+  localStorage.setItem('apathy_theme', t);
+  // update theme button text visually
+  const btn = document.getElementById('themeToggle');
+  if(btn) btn.innerText = (t === 'light' ? 'Light' : 'Dark');
+}
+function toggleTheme(){
+  applyTheme(theme === 'light' ? 'dark' : 'light');
+}
+// initial
+applyTheme(theme);
+
+/* ===========================
+   RENDER PRODUCTS with staggered appear
+   =========================== */
+function renderProducts(){
+  const container = document.getElementById('productsGrid');
+  container.innerHTML = '';
+  PRODUCTS.forEach((p, idx)=>{
+    const el = document.createElement('div');
+    el.className = 'card';
+    // add invisible until animation triggers
+    el.style.opacity = '0';
+    el.innerHTML = `
+      <div class="img" style="background-image:url('${p.img}')"></div>
+      <h3>${p.title}</h3>
+      <div class="meta">${p.desc}</div>
+      <div class="row">
+        <div><div class="price">$${p.price}</div></div>
+        <div style="display:flex;gap:8px">
+          <button class="open-btn" onclick="openProduct('${p.id}', event)">Open</button>
+          <button class="btn" onclick="addToCart('${p.id}', event)">Add</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(el);
+    // staggered appear
+    const delay = 80 * idx; // 80ms between items
+    setTimeout(()=> {
+      el.classList.add('appear');
+      el.style.opacity = '';
+    }, delay);
+  });
+  document.getElementById('itemsCount').innerText = PRODUCTS.length + ' items';
+}
+
+/* ===========================
+   NAV & SECTIONS (smooth fade & scroll)
+   =========================== */
+function goSection(name){
+  const sections = ['home','shop','about'];
+  sections.forEach(s=>{
+    const el = document.getElementById(s+'Section');
+    const nav = document.getElementById('nav'+capitalize(s));
+    if(s === name){
+      // show with fade
+      el.classList.remove('hidden');
+      requestAnimationFrame(()=> el.classList.add('active'));
+      nav.classList.add('active');
+      // smooth scroll into view (container top)
+      setTimeout(()=> {
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+      }, 20);
+    } else {
+      el.classList.remove('active');
+      setTimeout(()=> {
+        if(document.getElementById(s+'Section')) document.getElementById(s+'Section').classList.add('hidden');
+      }, 260);
+      nav.classList.remove('active');
+    }
+  });
+  if(name === 'shop') renderProducts();
+}
+function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+/* ===========================
+   MODAL HELPERS
+   =========================== */
+function showModal(html){
+  document.getElementById('modal').innerHTML = html;
+  document.getElementById('overlay').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('modal').innerHTML = '';
+}
+
+/* ===========================
+   PRODUCT DETAIL / OPEN
+   =========================== */
+function openProduct(id, ev){
+  if(ev) ev.stopPropagation();
+  const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
+  showModal(`
+    <div style="display:flex;gap:18px;align-items:flex-start">
+      <div style="flex:1">
+        <div style="height:320px;border-radius:12px;background:url('${p.img}') center/cover no-repeat"></div>
+      </div>
+      <div style="width:360px">
+        <div style="font-size:20px;font-weight:700">${p.title}</div>
+        <div class="small" style="margin-top:8px">${p.desc}</div>
+        <div style="margin-top:16px;font-size:20px;font-weight:700">$${p.price}</div>
+        <div style="margin-top:18px;display:flex;gap:12px">
+          <button class="btn" onclick="addToCart('${p.id}'); closeModal();">Add to cart</button>
+          <button class="open-btn" onclick="closeModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+/* ===========================
+   CART
+   =========================== */
+function persistCart(){ localStorage.setItem('apathy_cart', JSON.stringify(cart)); }
+function updateCartBadge(){
+  const count = Object.values(cart).reduce((s,n)=>s+n,0);
+  document.getElementById('cartCount').innerText = count;
+}
+function addToCart(id, ev){
+  if(ev) ev.stopPropagation();
+  cart[id] = (cart[id]||0) + 1;
+  persistCart();
+  updateCartBadge();
+  showCartToast('Добавлено в корзину');
+}
+function toggleCart(){ openCart(); }
+function openCart(){
+  let html = '<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700">Cart</div><div><button class="open-btn" onclick="closeModal()">Close</button></div></div><div style="height:12px"></div>';
+  if(Object.keys(cart).length===0){
+    html += '<div class="small">Корзина пуста. Добавьте товар.</div>';
+    showModal(html); return;
+  }
+  let total = 0;
+  for(const id in cart){
+    const p = PRODUCTS.find(x=>x.id===id);
+    const q = cart[id];
+    const line = p.price * q;
+    total += line;
+    html += `<div style="margin:8px 0;padding:10px;border-radius:10px;background:rgba(255,255,255,0.01);display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-weight:600">${p.title}</div><div class="small">$${p.price} × ${q}</div></div>
+      <div style="text-align:right"><div style="font-weight:700">$${line}</div>
+        <div style="margin-top:8px;display:flex;gap:6px;justify-content:flex-end">
+          <button class="open-btn" onclick="changeQty('${id}',-1)">-</button>
+          <button class="open-btn" onclick="changeQty('${id}',1)">+</button>
+          <button class="open-btn" onclick="removeFromCart('${id}')">Remove</button>
+        </div>
+      </div>
+    </div>`;
+  }
+  const totalRub = Math.round(total * CURRENCY_RATE_RUB_PER_USD);
+  html += `<div style="margin-top:12px;font-weight:700">Subtotal: $${total} (~${totalRub}₽)</div>`;
+  html += `<div style="margin-top:12px;display:flex;gap:10px"><button class="btn" onclick="checkout()">Checkout</button><button class="open-btn" onclick="clearCart()">Clear</button></div>`;
+  showModal(html);
+}
+function clearCart(){ cart = {}; persistCart(); updateCartBadge(); closeModal(); showCartToast('Корзина очищена'); }
+function changeQty(id,delta){ cart[id] = (cart[id]||0) + delta; if(cart[id] <= 0) delete cart[id]; persistCart(); updateCartBadge(); openCart(); }
+function removeFromCart(id){ delete cart[id]; persistCart(); updateCartBadge(); openCart(); }
+
+/* toast */
+function showCartToast(txt){
+  const el = document.getElementById('cartToast');
+  if(toastTimer) clearTimeout(toastTimer);
+  el.classList.remove('hidden');
+  el.innerHTML = `<div style="font-weight:700">${txt}</div><div style="margin-left:8px;opacity:0.7;cursor:pointer" onclick="hideCartToast()">✕</div>`;
+  toastTimer = setTimeout(()=>{ el.classList.add('hidden'); toastTimer = null; }, 1600);
+}
+function hideCartToast(){
+  const el = document.getElementById('cartToast');
+  if(toastTimer) clearTimeout(toastTimer);
+  el.classList.add('hidden');
+  toastTimer = null;
+}
+
+/* ===========================
+   Checkout: YooMoney + webhook notification
+   =========================== */
+function checkout(){
+  if(!currentUser){ showLoginModal('Войдите перед оплатой'); return; }
+  if(Object.keys(cart).length===0){ showLoginModal('Корзина пуста'); return; }
+  let totalUSD = 0;
+  const items = [];
+  for(const id in cart){
+    const p = PRODUCTS.find(x=>x.id===id);
+    totalUSD += p.price * cart[id];
+    items.push({id:p.id,title:p.title,price:p.price,qty:cart[id]});
+  }
+  const totalRub = Math.round(totalUSD * CURRENCY_RATE_RUB_PER_USD);
+  const base = 'https://yoomoney.ru/quickpay/shop-widget';
+  const account = encodeURIComponent(window.YOOMONEY_ACCOUNT || DEFAULT_YOOMONEY_ACCOUNT);
+  const link = `${base}?writer=buyer&targets=${encodeURIComponent('ApathyStore order')}&default-sum=${totalRub}&button-text=11&payment-type-choice=on&successURL=${encodeURIComponent(location.href)}&account=${account}`;
+
+  const payload = { user: currentUser, items, totalUSD, totalRub, date: new Date().toISOString() };
+  if(WEBHOOK_URL){
+    fetch(WEBHOOK_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(()=>{/* ignore */});
+  }
+
+  window.open(link, '_blank');
+  cart = {}; persistCart(); updateCartBadge();
+  showCartToast('Переход к оплате...');
+  closeModal();
+}
+
+/* ===========================
+   AUTH (client demo) — improved UI & signout & profile menu
+   =========================== */
+function hashText(text){
+  const enc = new TextEncoder();
+  return crypto.subtle.digest('SHA-256', enc.encode(text)).then(buf=> {
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  });
+}
+
+function showLoginModal(msg){
+  showModal(`
+    <div style="display:flex;gap:16px">
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:18px">Sign in / Sign up</div>
+        ${msg?`<div class="small" style="margin-top:8px;color:#f66">${msg}</div>`:''}
+        <div style="margin-top:12px"><input id="m_user" class="input" placeholder="username"></div>
+        <div style="margin-top:8px"><input id="m_pass" class="input" placeholder="password" type="password"></div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <button class="btn" onclick="doSignIn()">Sign in</button>
+          <button class="open-btn" onclick="doSignUp()">Sign up</button>
+        </div>
+        <div class="small" style="margin-top:10px">Telegram для связи @AlwaysApathiec.</div>
+      </div>
+    </div>
+  `);
+}
+
+async function doSignUp(){
+  const user = document.getElementById('m_user').value.trim();
+  const pass = document.getElementById('m_pass').value;
+  if(!user||!pass) return alert('Введите username и password');
+  const store = JSON.parse(localStorage.getItem('apathy_users')||'{}');
+  if(store[user]) return alert('Пользователь уже существует');
+  const h = await hashText(pass);
+  store[user] = {name:user,hash:h,isAdmin:false};
+  localStorage.setItem('apathy_users', JSON.stringify(store));
+  alert('Аккаунт создан. Войдите.');
+}
+
+async function doSignIn(){
+  const user = document.getElementById('m_user').value.trim();
+  const pass = document.getElementById('m_pass').value;
+  if(!user||!pass) return alert('Введите данные');
+  const store = JSON.parse(localStorage.getItem('apathy_users')||'{}');
+  if(!store[user]) return alert('Пользователь не найден');
+  const h = await hashText(pass);
+  if(h !== store[user].hash) return alert('Неверный пароль');
+  currentUser = {name:store[user].name, isAdmin: store[user].isAdmin || false};
+  localStorage.setItem('apathy_user', JSON.stringify(currentUser));
+  updateUIAfterAuth();
+  closeModal();
+  showCartToast('Вход выполнен как '+currentUser.name);
+}
+
+function updateUIAfterAuth(){
+  const btn = document.getElementById('navSign');
+  if(currentUser){
+    btn.innerText = currentUser.name;
+    // attach profile menu toggle
+    btn.onclick = (e)=>{ e.stopPropagation(); toggleProfileMenu(); };
+  } else {
+    btn.innerText = 'Sign in';
+    btn.onclick = openAuth;
+  }
+}
+function toggleProfileMenu(){
+  // remove existing
+  const existing = document.querySelector('.profile-menu');
+  if(existing){ existing.remove(); return; }
+  // create menu
+  const menu = document.createElement('div');
+  menu.className = 'profile-menu';
+  menu.innerHTML = `<div style="font-weight:700;margin-bottom:6px">Привет, ${currentUser.name}</div>
+    <button onclick="closeProfileMenu()">Close</button>
+    <button onclick="signOut()">Sign out</button>`;
+  document.body.appendChild(menu);
+  // position near navSign (approx)
+  const btn = document.getElementById('navSign');
+  const rect = btn.getBoundingClientRect();
+  menu.style.top = (rect.bottom + 8) + 'px';
+  menu.style.right = (window.innerWidth - rect.right + 8) + 'px';
+  profileMenuEl = menu;
+}
+function closeProfileMenu(){ if(profileMenuEl){ profileMenuEl.remove(); profileMenuEl = null; } }
+document.addEventListener('click', ()=>{ closeProfileMenu(); });
+
+function signOut(){
+  localStorage.removeItem('apathy_user');
+  currentUser = null;
+  updateUIAfterAuth();
+  closeModal();
+  closeProfileMenu();
+  showCartToast('Выход выполнен');
+}
+
+/* ===========================
+   Admin panel (autosave form fields)
+   =========================== */
+let adminFormTimer = null;
+function openAdmin(){
+  if(!currentUser || !currentUser.isAdmin){
+    showLoginModal('Требуется доступ администратора. Войдите как admin.');
+    return;
+  }
+  let title = localStorage.getItem('admin_new_title') || '';
+  let price = localStorage.getItem('admin_new_price') || '';
+  let img = localStorage.getItem('admin_new_img') || '';
+  let desc = localStorage.getItem('admin_new_desc') || '';
+  let html = `<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-weight:700">Admin panel</div><div><button class="open-btn" onclick="closeModal()">Close</button></div></div><div style="height:12px"></div>`;
+  html += `<div style="display:grid;grid-template-columns:1fr 320px;gap:14px">
+    <div>
+      <div style="font-weight:700;margin-bottom:8px">Products</div>
+      <div id="adminProducts"></div>
+      <div style="height:12px"></div>
+      <div style="font-weight:700;margin-bottom:8px">Add new product</div>
+      <input id="new_title" class="input" placeholder="Title" value="${escapeHtml(title)}">
+      <input id="new_price" class="input" placeholder="Price (USD)" type="number" value="${escapeHtml(price)}">
+      <input id="new_img" class="input" placeholder="Image path or URL (e.g. img/new.png)" value="${escapeHtml(img)}">
+      <textarea id="new_desc" class="input" placeholder="Description">${escapeHtml(desc)}</textarea>
+      <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" onclick="addProduct()">Add</button><button class="open-btn" onclick="persistProducts()">Save</button></div>
+    </div>
+    <div>
+      <div style="font-weight:700;margin-bottom:8px">Settings</div>
+      <div class="small">Webhook URL (server that will forward to Telegram):</div>
+      <input id="admin_webhook" class="input" placeholder="https://yourserver.com/webhook" value="${escapeHtml(WEBHOOK_URL)}">
+      <div class="small" style="margin-top:8px">YooMoney account (wallet) — used in checkout link:</div>
+      <input id="admin_yoo" class="input" placeholder="4100..." value="${escapeHtml(window.YOOMONEY_ACCOUNT || DEFAULT_YOOMONEY_ACCOUNT)}">
+      <div style="margin-top:8px"><button class="btn" onclick="saveAdminSettings()">Save settings</button></div>
+      <div style="height:20px"></div>
+      <div style="font-weight:700;margin-bottom:8px">Admin actions</div>
+      <div class="small">You can export products or reset storage from here.</div>
+      <div style="display:flex;gap:8px;margin-top:8px"><button class="open-btn" onclick="exportProducts()">Export JSON</button><button class="open-btn" onclick="resetProducts()">Reset</button></div>
+    </div>
+  </div>`;
+  showModal(html);
+  renderAdminProducts();
+  // attach autosave listeners
+  setTimeout(()=> {
+    const inputs = ['new_title','new_price','new_img','new_desc'];
+    inputs.forEach(id=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener('input', ()=> {
+        if(adminFormTimer) clearTimeout(adminFormTimer);
+        adminFormTimer = setTimeout(()=> {
+          localStorage.setItem('admin_new_title', document.getElementById('new_title').value);
+          localStorage.setItem('admin_new_price', document.getElementById('new_price').value);
+          localStorage.setItem('admin_new_img', document.getElementById('new_img').value);
+          localStorage.setItem('admin_new_desc', document.getElementById('new_desc').value);
+          showCartToast('Черновик сохранён');
+        }, 700);
+      });
+    });
+  },60);
+}
+function renderAdminProducts(){
+  const el = document.getElementById('adminProducts'); el.innerHTML='';
+  PRODUCTS.forEach(p=>{
+    const div = document.createElement('div');
+    div.className = 'admin-list';
+    div.style.marginBottom = '8px';
+    div.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><div><b>${p.title}</b><div class="small">$${p.price}</div></div><div style="display:flex;gap:8px"><button class="open-btn" onclick="editProduct('${p.id}')">Edit</button><button class="open-btn" onclick="removeProduct('${p.id}')">Remove</button></div></div>`;
+    el.appendChild(div);
+  });
+}
+function addProduct(){
+  const title = document.getElementById('new_title').value.trim();
+  const price = parseFloat(document.getElementById('new_price').value);
+  const img = document.getElementById('new_img').value.trim();
+  const desc = document.getElementById('new_desc').value.trim();
+  if(!title||isNaN(price)||!img){ return alert('Title, price and img path required'); }
+  const id = 'p'+Date.now();
+  PRODUCTS.push({id,title,price,desc,img});
+  persistProducts();
+  renderProducts();
+  renderAdminProducts();
+  showCartToast('Продукт добавлен');
+  // clear autosave
+  localStorage.removeItem('admin_new_title');
+  localStorage.removeItem('admin_new_price');
+  localStorage.removeItem('admin_new_img');
+  localStorage.removeItem('admin_new_desc');
+}
+function persistProducts(){ localStorage.setItem('apathy_products', JSON.stringify(PRODUCTS)); showCartToast('Products saved'); }
+function removeProduct(id){ if(!confirm('Удалить продукт?')) return; PRODUCTS = PRODUCTS.filter(x=>x.id!==id); persistProducts(); renderProducts(); renderAdminProducts(); }
+function editProduct(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  if(!p) return;
+  showModal(`<div style="font-weight:700">${p.title}</div>
+    <div style="margin-top:8px"><input id="edit_title" class="input" value="${escapeHtml(p.title)}"></div>
+    <div style="margin-top:8px"><input id="edit_price" class="input" value="${escapeHtml(p.price)}" type="number"></div>
+    <div style="margin-top:8px"><input id="edit_img" class="input" value="${escapeHtml(p.img)}"></div>
+    <div style="margin-top:8px"><textarea id="edit_desc" class="input">${escapeHtml(p.desc||'')}</textarea></div>
+    <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" onclick="saveEdit('${p.id}')">Save</button><button class="open-btn" onclick="closeModal()">Cancel</button></div>
+  `);
+}
+function saveEdit(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  p.title = document.getElementById('edit_title').value.trim();
+  p.price = parseFloat(document.getElementById('edit_price').value);
+  p.img = document.getElementById('edit_img').value.trim();
+  p.desc = document.getElementById('edit_desc').value.trim();
+  persistProducts(); renderProducts(); renderAdminProducts(); closeModal();
+}
+function saveAdminSettings(){
+  WEBHOOK_URL = document.getElementById('admin_webhook').value.trim();
+  const y = document.getElementById('admin_yoo').value.trim();
+  if(y) { window.YOOMONEY_ACCOUNT = y; }
+  persistProducts();
+  showCartToast('Settings saved (note: put backend webhook to send Telegram safely)');
+}
+function exportProducts(){ const blob = new Blob([JSON.stringify(PRODUCTS,null,2)], {type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='products.json'; a.click(); URL.revokeObjectURL(url); }
+function resetProducts(){ if(!confirm('Reset to defaults?')) return; localStorage.removeItem('apathy_products'); location.reload(); }
+
+/* ===========================
+   UTIL & INIT
+   =========================== */
+function escapeHtml(s){ if(!s && s !== 0) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function updateUIAfterAuth(){ // call on load and after login/logout
+  const u = JSON.parse(localStorage.getItem('apathy_user')||'null');
+  currentUser = u;
+  if(currentUser){
+    document.getElementById('navSign').innerText = currentUser.name;
+    document.getElementById('navSign').onclick = (e)=>{ e.stopPropagation(); toggleProfileMenu(); };
+  } else {
+    document.getElementById('navSign').innerText = 'Sign in';
+    document.getElementById('navSign').onclick = openAuth;
+  }
+}
+function openAuth(){ showLoginModal(); }
+function showUserMenu(){ toggleProfileMenu(); }
+
+renderProducts();
+updateCartBadge();
+updateUIAfterAuth();
+goSection('home');
+
+/* create demo admin user if none */
+(function ensureAdmin(){
+  const users = JSON.parse(localStorage.getItem('apathy_users')||'{}');
+  if(!users['admin']){
+    hashText('admin').then(h=>{
+      users['admin'] = {name:'admin', hash:h, isAdmin:true};
+      localStorage.setItem('apathy_users', JSON.stringify(users));
+      console.log('Default admin created: username=admin password=adminApathy (change it in localStorage)');
+    });
+  }
+})();
+
+/* keyboard: escape to close modal or profile menu */
+document.addEventListener('keydown', (e)=> {
+  if(e.key === 'Escape') {
+    closeModal();
+    closeProfileMenu();
+  }
+});
+</script>
+</body>
+</html>
